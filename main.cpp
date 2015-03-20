@@ -91,16 +91,14 @@ void main(int argc, char** argv)
 	if(argc>1) code = argv[1]; //command line code input
 
 	typedef void (*fptr)(); //because you can't normally make an array of function pointers :(
-	fptr funcs[94] = {o,o,o,o,o,o,o,o,o,o, //0-9
-				   o,o,o,o,o,o,o,o,o,o, //10-19
-				   o,o,o,o,o,o,o,o,o,o, //20-29
-				   o,o,o,o,o,o,o,o,o,o, //30-39
-				   o,o,o, add, in, sub, out,o,o,o, //40-49, add:'+'(43), in:','(44), sub:'-'(45), out:'.'(46)
-				   o,o,o,o,o,o,o,o,o,o, //50-59
-				   mleft,o, mright,o,o,o,o,o,o,o, //60-69, left:'<'(60), right:'>'(62)
-				   o,o,o,o,o,o,o,o,o,o, //70-79
-				   o,o,o,o,o,o,o,o,o,o, //80-89
-				   o,loop,o,endloop}; //90-93 loop:'['(91), endloop:']'(93), bloody messy
+	fptr funcs[256];
+	for(int i=0;i<256;i++) funcs[i]=o; //init all to empty function
+
+	funcs['+'] = add;		funcs['-'] = sub; //assign functions to characters
+	funcs['['] = loop;		funcs[']'] = endloop;
+	funcs['<'] = mleft;		funcs['>'] = mright;
+	funcs[','] = in;		funcs['.'] = out;
+
 	while(codepointer < code.size()) //do until end of string
 	{
 		funcs[code[codepointer]](); //execute function for current character
